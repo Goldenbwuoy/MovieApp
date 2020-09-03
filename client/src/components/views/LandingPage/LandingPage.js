@@ -13,16 +13,29 @@ const { Title } = Typography
 function LandingPage() {
 
     const [Movies, setMovies] = useState([])
+    const [CurrentPage, setCurrentPage] = useState(0)
 
     useEffect(() => {
-        fetch(`${API_URL}movie/popular?api_key=${API_KEY}&language=US&page=1`)
-            .then(response => response.json())
-            .then(response => {
-                console.log(response)
-                setMovies(response.results)
-            })
-        
+        const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=US&page=1`
+        fetchMovies(endpoint)
     }, [])
+
+    const fetchMovies = (path) => {
+        fetch(path)
+        .then(response => response.json())
+        .then(response => {
+            console.log(response)
+            setMovies([...Movies, ...response.results])
+            setCurrentPage(response.page)
+        })
+    }
+
+    // Fetch more movies from the next page when load more button is clicked
+    const handleClick = () => {
+        const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=US&page=${CurrentPage + 1}` 
+        fetchMovies(endpoint)
+        
+    }
     return (
         <>
            <div className="landingPage">
@@ -60,7 +73,7 @@ function LandingPage() {
                     {/* Load more button */}
                     <br/>
                     <div style={{ display: 'flex', justifyContent: 'center'}}>
-                        <button onClick>Load More</button>
+                        <button onClick={handleClick}>Load More</button>
                     </div>
                </div>
                

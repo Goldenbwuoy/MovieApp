@@ -3,8 +3,11 @@ import { API_URL, API_KEY, IMAGE_URL } from "../../Config";
 import MainImage from "../LandingPage/Sections/MainImage";
 import { Descriptions, Row, Button } from "antd";
 import GridCard from "../LandingPage/Sections/GridCard";
+import Favorite from "./Sections/Favorite";
 
 function MovieDetailPage(props) {
+  const movieId = props.match.params.movieId;
+
   const [Movie, setMovie] = useState([]);
   const [Crews, setCrews] = useState([]);
   const [ActorToggle, setActorToggle] = useState(false);
@@ -42,7 +45,7 @@ function MovieDetailPage(props) {
       {/* body */}
       <div style={{ width: "85%", margin: "1rem auto" }}>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button>Add to Favorite</Button>
+          <Favorite userFrom={localStorage.getItem("userId")} movieId={movieId} movieInfo={Movie}/>
         </div>
       </div>
 
@@ -72,25 +75,27 @@ function MovieDetailPage(props) {
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Button onClick={handleClick}>Toggle Actor View</Button>
       </div>
-      <br/>
+      <br />
 
       {/* Grid cards for crews */}
 
-      {ActorToggle && (
-        <Row gutter={[16, 16]}>
-          {Crews &&
-            Crews.map((crew, index) => (
-              <React.Fragment key={index}>
-                {crew.profile_path && (
-                  <GridCard
-                    actor
-                    image={`${IMAGE_URL}w500${crew.profile_path}`}
-                  />
-                )}
-              </React.Fragment>
-            ))}
-        </Row>
-      )}
+      <div style={{ width: "85%", margin: "1rem auto" }}>
+        {ActorToggle && (
+          <Row gutter={[16, 16]}>
+            {Crews &&
+              Crews.map((crew, index) => (
+                <React.Fragment key={index}>
+                  {crew.profile_path && (
+                    <GridCard
+                      actor
+                      image={`${IMAGE_URL}w500${crew.profile_path}`}
+                    />
+                  )}
+                </React.Fragment>
+              ))}
+          </Row>
+        )}
+      </div>
     </div>
   );
 }

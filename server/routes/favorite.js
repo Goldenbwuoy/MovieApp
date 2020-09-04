@@ -22,7 +22,7 @@ router.post("/favoriteNumber", (req, res) => {
 
 router.post("/favorited", (req, res) => {
     // find favorited information inside Favorite collection by Movie id and, userFrom
-    Favorite.find({'movieId': req.body.movieId, userFrom: req.body.userFrom})
+    Favorite.find({'movieId': req.body.movieId, 'userFrom': req.body.userFrom})
         .exec((err, favorite) => {
             if (err) return res.status(400).send(err)
 
@@ -54,17 +54,20 @@ router.post("/addToFavorite", (req, res) => {
 
 router.post("/removeFromFavorite", (req, res) => {
     
-    Favorite.findOneAndDelete({ movieId: req.body.movieId, userFrom: req.body.userFrom})
+    Favorite.findOneAndDelete({ 'movieId': req.body.movieId, 'userFrom': req.body.userFrom})
         .then((err, doc) => {
             if (err) return res.status(400).json({ success: false, err})
             res.status(200).json({ success: true, doc })
         })
+});
 
-        Favorite.find
+router.post("/getFavoriteMovie", (req, res) => {
     
-    
-    
-    
+    Favorite.find({ 'userFrom': req.body.userFrom})
+        .exec((err, favorites) => {
+            if (err) return res.status(400).send(err)
+            return res.status(200).json({ success: true, favorites})
+        })
 });
 
 

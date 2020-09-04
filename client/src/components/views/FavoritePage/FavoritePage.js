@@ -20,6 +20,22 @@ function FavoritePage() {
          })
     }, [])
 
+    const onClickRemove = (movieId) => {
+
+        const variable = {
+            movieId: movieId,
+            userFrom: localStorage.getItem('userId')
+        }
+        axios.post('/api/favorite/removeFromFavorite', variable)
+        .then(response => {
+            if (response.data.success) {
+                
+            }else {
+                alert('Failed to remove from  favorites')
+            }
+        })
+    }
+
     const renderTableBody = FavoriteMovies.map((movie, index) => {
 
         const content = (
@@ -39,7 +55,7 @@ function FavoritePage() {
                 </Popover>
                 
                 <td>{movie.movieRunTime} minutes</td>
-                <td><button>Remove</button></td>
+                <td><button onClick={() => onClickRemove(movie.movieId)}>Remove</button></td>
             </tr>
         )
     })

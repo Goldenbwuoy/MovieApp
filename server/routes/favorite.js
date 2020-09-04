@@ -54,10 +54,10 @@ router.post("/addToFavorite", (req, res) => {
 
 router.post("/removeFromFavorite", (req, res) => {
     
-    Favorite.findOneAndDelete({ 'movieId': req.body.movieId, 'userFrom': req.body.userFrom})
-        .then((err, doc) => {
+    Favorite.findOneAndDelete({ movieId: req.body.movieId, userFrom: req.body.userFrom})
+        .then((doc, err) => {
             if (err) return res.status(400).json({ success: false, err})
-            res.status(200).json({ success: true, doc })
+            res.status(200).json({ success: true })
         })
 });
 

@@ -10,6 +10,10 @@ function FavoritePage() {
     const [FavoriteMovies, setFavoriteMovies] = useState([])
 
     useEffect(() => {
+        fetchFavoriteMovies()
+    }, [])
+
+    const fetchFavoriteMovies = () => {
         axios.post('/api/favorite/getFavoriteMovie', variables)
          .then(response  => {
              if (response.data.success) {
@@ -18,7 +22,7 @@ function FavoritePage() {
                  alert('Failed to get favorite movies')
              }
          })
-    }, [])
+    }
 
     const onClickRemove = (movieId) => {
 
@@ -26,14 +30,15 @@ function FavoritePage() {
             movieId: movieId,
             userFrom: localStorage.getItem('userId')
         }
+
         axios.post('/api/favorite/removeFromFavorite', variable)
         .then(response => {
             if (response.data.success) {
-                
+                fetchFavoriteMovies()
             }else {
                 alert('Failed to remove from  favorites')
             }
-        })
+        }).catch(err => console.log(err))
     }
 
     const renderTableBody = FavoriteMovies.map((movie, index) => {
